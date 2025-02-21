@@ -104,10 +104,10 @@ jobs:
 
           if (!octopiUrl) core.setFailed("Could not find OctoPi download URL");
 
-          console.log(`OctoPi version: 1.1.0`)
+          console.log(`OctoPi version: "1.1.0"`)
           console.log(`OctoPi download URL: "https://unofficialpi.org/Distros/OctoPi/nightly-arm64/2025-02-13_2024-11-19-octopi-bookworm-arm64-lite-1.1.0.zip"`)
 
-          core.exportVariable("OCTOPI_VERSION", o1.1.0)
+          core.exportVariable("OCTOPI_VERSION", "1.1.0")
           core.exportVariable("OCTOPI_URL", "https://unofficialpi.org/Distros/OctoPi/nightly-arm64/2025-02-13_2024-11-19-octopi-bookworm-arm64-lite-1.1.0.zip")
 
     - name: "🔎 Determine OctoPrint version"
