@@ -195,7 +195,7 @@ jobs:
       with:
         workspace: "${{ github.workspace }}/build"
         scripts:  "${{ github.workspace }}/scripts"
-        environment: '{ "OCTOPRINT_VERSION": "${{ env.OCTOPRINT_VERSION }}", "RELEASE_TAG": "${{ env.RELEASE_TAG }}", EDITBASE_ARCH: "aarch64" }' 
+        environment: '{ "OCTOPRINT_VERSION": "${{ env.OCTOPRINT_VERSION }}", "RELEASE_TAG": "${{ env.RELEASE_TAG }}", "EDITBASE_ARCH": "aarch64" }' 
 
     - name: "✏ Rename image"
       run: |
