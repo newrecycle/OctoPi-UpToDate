@@ -25,6 +25,7 @@ jobs:
       image-zip: ${{ env.IMAGE_ZIP }}
       image-url: ${{ env.IMAGE_URL }}
       e2e-branch: ${{ env.E2E_BRANCH }}
+      EDITBASE_ARCH: "aarch64"
     steps:
 
     - name: "⬇ Checkout"
