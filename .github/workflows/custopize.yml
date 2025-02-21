@@ -25,7 +25,6 @@ jobs:
       image-zip: ${{ env.IMAGE_ZIP }}
       image-url: ${{ env.IMAGE_URL }}
       e2e-branch: ${{ env.E2E_BRANCH }}
-      EDITBASE_ARCH: "aarch64"
     steps:
 
     - name: "⬇ Checkout"
@@ -196,7 +195,7 @@ jobs:
       with:
         workspace: "${{ github.workspace }}/build"
         scripts:  "${{ github.workspace }}/scripts"
-        environment: '{ "OCTOPRINT_VERSION": "${{ env.OCTOPRINT_VERSION }}", "RELEASE_TAG": "${{ env.RELEASE_TAG }}" }'
+        environment: '{ "OCTOPRINT_VERSION": "${{ env.OCTOPRINT_VERSION }}", "RELEASE_TAG": "${{ env.RELEASE_TAG }}", EDITBASE_ARCH: "aarch64" }' 
 
     - name: "✏ Rename image"
       run: |
