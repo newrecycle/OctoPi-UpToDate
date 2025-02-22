@@ -12,7 +12,7 @@ on:
       octoprint_version:
         description: "OctoPrint version (leave empty to use latest stable release)"
         required: false
-        default: ''
+        default: '1.11.0rc3'
 
 jobs:
   build:
@@ -104,11 +104,11 @@ jobs:
 
           if (!octopiUrl) core.setFailed("Could not find OctoPi download URL");
 
-          console.log(`OctoPi version: ${octopiVersion}`)
-          console.log(`OctoPi download URL: ${octopiUrl}`)
+          console.log(`OctoPi version: "1.1.0"`)
+          console.log(`OctoPi download URL: "https://unofficialpi.org/Distros/OctoPi/nightly-arm64/2025-02-13_2024-11-19-octopi-bookworm-arm64-lite-1.1.0.zip"`)
 
-          core.exportVariable("OCTOPI_VERSION", octopiVersion)
-          core.exportVariable("OCTOPI_URL", octopiUrl)
+          core.exportVariable("OCTOPI_VERSION", "1.1.0")
+          core.exportVariable("OCTOPI_URL", "https://unofficialpi.org/Distros/OctoPi/nightly-arm64/2025-02-13_2024-11-19-octopi-bookworm-arm64-lite-1.1.0.zip")
 
     - name: "🔎 Determine OctoPrint version"
       run: |
@@ -149,7 +149,7 @@ jobs:
         mkdir build
         cd build
         curl -L -o octopi.zip ${{ env.OCTOPI_URL }}
-        
+
         unzip octopi.zip
         rm octopi.zip
 
@@ -160,26 +160,34 @@ jobs:
       run: |
         now=$(date +"%Y%m%d%H%M%S")
 
-        RELEASE_NAME="OctoPi ${{ env.OCTOPI_VERSION }} with OctoPrint ${{ env.OCTOPRINT_VERSION }} (build $now)"
+        RELEASE_BUILD="build $now"
+        [ "$GITHUB_REF_NAME" != "main" ] && RELEASE_BUILD="$RELEASE_BUILD from branch $GITHUB_REF_NAME"
+
+        RELEASE_NAME="OctoPi ${{ env.OCTOPI_VERSION }} with OctoPrint ${{ env.OCTOPRINT_VERSION }} ($RELEASE_BUILD)"
         echo "RELEASE_NAME=$RELEASE_NAME" >> $GITHUB_ENV
 
         RELEASE_TAG="${{ env.OCTOPI_VERSION }}-${{ env.OCTOPRINT_VERSION }}-$now"
         echo "RELEASE_TAG=$RELEASE_TAG" >> $GITHUB_ENV
-        
+
         # release body
 
         cat <<EOF > ./build/release.md
-  
+
           * OctoPi ${{ env.OCTOPI_VERSION }}
           * OctoPrint ${{ env.OCTOPRINT_VERSION }}
           * Latest versions of the bundled OctoPrint plugins
           * Latest kernel & bootloader
           * Latest libcamera-apps
-          * Slight documentation changes in included config files
-          
+          * New camera-streamer based webcam stack
+
         Created with [CustoPiZer](https://github.com/OctoPrint/CustoPiZer)
 
         <!-- mark:untested -->
+        EOF
+
+        [ "$GITHUB_REF_NAME" != "main" ] && cat <<EOF >> ./build/release.md
+
+        <!-- mark:ignored -->
         EOF
 
     - name: "🏗 Run CustoPiZer"
@@ -187,12 +195,12 @@ jobs:
       with:
         workspace: "${{ github.workspace }}/build"
         scripts:  "${{ github.workspace }}/scripts"
-        environment: '{ "OCTOPRINT_VERSION": "${{ env.OCTOPRINT_VERSION }}", "RELEASE_TAG": "${{ env.RELEASE_TAG }}" }'
-    
+        environment: '{ "OCTOPRINT_VERSION": "${{ env.OCTOPRINT_VERSION }}", "RELEASE_TAG": "${{ env.RELEASE_TAG }}", "EDITBASE_ARCH": "aarch64", "EDITBASE_IMAGE_ENLARGEROOT": "8192" }' 
+
     - name: "✏ Rename image"
       run: |
         RELEASE_TAG="${{ env.RELEASE_TAG }}"
-        
+
         IMAGE="octopi-$RELEASE_TAG.img"
         echo "IMAGE=$IMAGE" >> $GITHUB_ENV
 
