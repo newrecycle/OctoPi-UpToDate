@@ -9,6 +9,8 @@ install_cleanup_trap
 ### --- install the new stuff -----------------------------------------------
 
 # install camera-streamer and dependencies
+wget http://ftp.us.debian.org/debian/pool/main/s/srt/libsrt1.4-gnutls_1.4.2-1.3_arm64.deb
+dpkg -i ./libsrt*
 apt-get install --yes camera-streamer-raspi
 
 # install units, configs & helpers
