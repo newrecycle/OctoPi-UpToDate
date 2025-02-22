@@ -9,7 +9,7 @@ install_cleanup_trap
 ### --- install the new stuff -----------------------------------------------
 apt-get update
 apt-get --fix-broken install
-apt-get install -V --allow-downgrades --allow-remove-essential --allow-change-held-packages --yes camera-streamer-raspi_0.2.5.bullseye-3_arm64.deb
+apt-get install -V --allow-downgrades --allow-remove-essential --allow-change-held-packages --yes camera-streamer-raspi=0.2.5.bullseye-3_arm64
 
 # install units, configs & helpers
 pushd /tmp
